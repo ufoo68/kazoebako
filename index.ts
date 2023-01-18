@@ -6,19 +6,22 @@ const env = load({
 });
 
 const obniz = new Obniz(env.DEVICE_ID);
-obniz.onconnect = async (o) => {
+obniz.onconnect = async (obn) => {
+  console.info('connected')
   let count = 0;
-  const io0 = o.getIO(0);
-  const io1 = o.getIO(1);
-  const io3 = o.getIO(3);
-  io0.pull('5v');
-  io0.drive('open-drain');
-  io0.output(false);
-  io1.output(true);
-  io3.input(async (value) => {
-    if (!value) {
+  let start = Date.now();
+  const gnd = obn.getIO(0);
+  const vcc = obn.getIO(1);
+  const sig1 = obn.getIO(3);
+  gnd.pull('5v');
+  gnd.drive('open-drain');
+  gnd.output(false);
+  vcc.output(true);
+  sig1.input(async (value) => {
+    if (!value && Date.now() - start > 500) {
       count++;
       console.log(count);
+      start = Date.now();
     }
   });
 }

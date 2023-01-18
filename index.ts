@@ -25,9 +25,11 @@ obniz.onconnect = async (obn) => {
   sig1.input(async (value) => {
     if (!value && Date.now() - start > 500) {
       start = Date.now();
-      await connection.execute('insert into vote_histories (device_id, created_at, updated_at) values (?, ?, ?);', [
-        1, getSqlDatetime(), getSqlDatetime()
-      ]);
+      await connection.execute(
+        'insert into vote_histories (device_id, created_at, updated_at) values (?, ?, ?);',
+        [
+          1, getSqlDatetime(), getSqlDatetime()
+        ]);
       console.info('send data device1');
     }
   });

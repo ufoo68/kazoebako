@@ -1,1 +1,1 @@
-export { default as hello } from './hello';
+export { default as fetchVoteCount } from './fetch-vote-count';

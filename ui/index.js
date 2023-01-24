@@ -5,13 +5,10 @@ const fetchVoteCount = async (deviceId) => {
 
 
 document.getElementById('refetch-button').addEventListener('click', () => {
-  for (const deviceId of [1, 2, 3]) {
-    fetchVoteCount(deviceId).then(
-      (res) => {
-        const count = res?.count ?? 0;
-        document.getElementById(`vote-${deviceId}`).innerHTML = count;
-      }
-    );
-  }
+  Promise.all([1, 2, 3].map(async (deviceId) => {
+    const res = await fetchVoteCount(deviceId)
+    const count = res?.count ?? 0;
+    document.getElementById(`vote-${deviceId}`).innerHTML = count;
+  }));
 });
 

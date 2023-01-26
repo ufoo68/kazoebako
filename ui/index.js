@@ -22,10 +22,9 @@ let dresses = [
     count: 0,
     background: 'rgba(54, 162, 235, 0.2)',
   },
-]
+];
 
 const ctx = document.getElementById('vote-chart');
-
 const chart = new Chart(ctx, {
   type: 'bar',
   data: {
@@ -46,23 +45,30 @@ const chart = new Chart(ctx, {
   }
 });
 
-const intervalId = setInterval(async () => {
-  dresses = await Promise.all(dresses.map(async (dress) => {
-    const res = await fetchVoteCount(dress.id)
-    const count = res?.count ?? 0;
-    return {
-      ...dress,
-      count,
-    }
-  }));
-  chart.data.datasets.forEach((dataset) => {
-    dataset.data = [dresses.find((dress) => dress.label === dataset.label).count];
-  });
-  chart.data.datasets = chart.data.datasets.sort((a, b) => b.data[0] - a.data[0]);
-  chart.update();
-}, 1000);
-
-document.getElementById('stop-button').addEventListener('click', () => {
-  console.info('stop update.');
-  clearInterval(intervalId);
-})
+let isSyncing = false;
+let intervalId;
+const syncButton = document.getElementById('sync-button');
+syncButton.addEventListener('click', () => {
+  if (!isSyncing) {
+    intervalId = setInterval(async () => {
+      dresses = await Promise.all(dresses.map(async (dress) => {
+        const res = await fetchVoteCount(dress.id)
+        const count = res?.count ?? 0;
+        return {
+          ...dress,
+          count,
+        }
+      }));
+      chart.data.datasets.forEach((dataset) => {
+        dataset.data = [dresses.find((dress) => dress.label === dataset.label).count];
+      });
+      chart.data.datasets = chart.data.datasets.sort((a, b) => b.data[0] - a.data[0]);
+      chart.update();
+    }, 1000);
+    syncButton.innerHTML = '同期停止';
+  } else if (intervalId) {
+    clearInterval(intervalId);
+    syncButton.innerHTML = '同期開始';
+  }
+  isSyncing = !isSyncing;
+});

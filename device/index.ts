@@ -1,6 +1,6 @@
 import Obniz from 'obniz';
 import { load } from 'ts-dotenv';
-import mysql from 'mysql2/promise';
+import * as mongoDB from 'mongodb';
 
 type Sensor = {
   id: number;
@@ -32,16 +32,17 @@ const sensors: Sensor[] = [
 
 const env = load({
   DEVICE_ID: String,
-  DATABASE_URL: String,
+  DB_CONN_STRING: String,
 });
-
-const getSqlDatetime = () => new Date().toISOString().slice(0, 19).replace('T', ' ');
 
 const obniz = new Obniz(env.DEVICE_ID);
 obniz.onconnect = async (obn) => {
   console.info('device connected');
-  const connection = await mysql.createConnection(env.DATABASE_URL);
-  console.info('database connected');
+  const client: mongoDB.MongoClient = new mongoDB.MongoClient(env.DB_CONN_STRING);
+  await client.connect();
+  const db: mongoDB.Db = client.db('kazoebako');
+  const voteHistoryCollection: mongoDB.Collection = db.collection('voteHistory');
+  console.log(`Successfully connected to database: ${db.databaseName} and collection: ${voteHistoryCollection.collectionName}`);
   for (const sensor of sensors) {
     let start = Date.now();
     const gnd = obn.getIO(sensor.gnd);
@@ -54,11 +55,7 @@ obniz.onconnect = async (obn) => {
     signal.input(async (value) => {
       if (!value && Date.now() - start > 500) {
         start = Date.now();
-        await connection.execute(
-          'insert into vote_histories (device_id, created_at, updated_at) values (?, ?, ?);',
-          [
-            sensor.id, getSqlDatetime(), getSqlDatetime()
-          ]);
+        await voteHistoryCollection.insertOne({ deviceId: sensor.id })
         console.info(`send data device id: ${sensor.id}`);
       }
     });

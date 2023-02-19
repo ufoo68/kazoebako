@@ -1,6 +1,8 @@
 import type { AWS } from '@serverless/typescript';
 
 import fetchVoteCount from '@functions/fetch-vote-count';
+import sendVote from '@functions/send-vote';
+import resetVote from '@functions/reset-vote';
 
 const serverlessConfiguration: AWS = {
   service: 'api',
@@ -22,7 +24,9 @@ const serverlessConfiguration: AWS = {
   },
   // import the function via paths
   functions: {
-    fetchVoteCount
+    fetchVoteCount,
+    sendVote,
+    resetVote,
   },
   package: { individually: true },
   custom: {

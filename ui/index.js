@@ -74,9 +74,6 @@ const updateVotes = async (chart) => {
   chart.data.datasets.forEach((dataset) => {
     dataset.data = [votes.find((dress) => dress.label === dataset.label).count];
   });
-  chart.data.datasets = chart.data.datasets.sort(
-    (a, b) => b.data[0] - a.data[0]
-  );
   chart.update();
 };
 

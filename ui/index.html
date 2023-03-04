@@ -7,44 +7,15 @@
   <script src="./index.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.0/dist/full.css" rel="stylesheet" type="text/css" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
-  <div class="w-screen h-screen flex flex-col justify-center items-center space-y-5">
-    <h1 class="text-2xl">カラードレス投票</h1>
-    <div class="flex space-x-5">
-      <div class="card w-80 bg-base-100 shadow-xl">
-        <figure><img src="/green.png" alt="Shoes" /></figure>
-        <div class="card-body">
-          <h2 class="card-title">緑色</h2>
-          <div class="stat text-center">
-            <div class="stat-title">投票数</div>
-            <div id="vote-1" class="stat-value">0</div>
-          </div>
-        </div>
-      </div>
-      <div class="card w-80 bg-base-100 shadow-xl">
-        <figure><img src="/blue.png" alt="Shoes" /></figure>
-        <div class="card-body">
-          <h2 class="card-title">青色</h2>
-          <div class="stat text-center">
-            <div class="stat-title">投票数</div>
-            <div id="vote-2" class="stat-value">0</div>
-          </div>
-        </div>
-      </div>
-      <div class="card w-80 bg-base-100 shadow-xl">
-        <figure><img src="/red.png" alt="Shoes" /></figure>
-        <div class="card-body">
-          <h2 class="card-title">赤色</h2>
-          <div class="stat text-center">
-            <div class="stat-title">投票数</div>
-            <div id="vote-3" class="stat-value">0</div>
-          </div>
-        </div>
-      </div>
+  <div class="w-screen h-screen flex flex-col justify-center items-center space-y-1">
+    <div class="w-10/12">
+      <canvas id="vote-chart"></canvas>
     </div>
-    <button class="btn" id="reset">投票リセット</button>
+    <button class="btn btn-sm hidden" id="reset">投票リセット</button>
   </div>
 </body>
 

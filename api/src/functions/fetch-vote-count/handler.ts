@@ -4,12 +4,17 @@ import { APIGatewayProxyEvent } from 'aws-lambda';
 import { load } from 'ts-dotenv';
 import * as mongoDB from 'mongodb';
 
+let client: mongoDB.MongoClient = null;
+
 const env = load({
   DB_CONN_STRING: String,
 });
-const fetchVoteCount = async (event: APIGatewayProxyEvent) => {
-  const client: mongoDB.MongoClient = new mongoDB.MongoClient(env.DB_CONN_STRING);
-  await client.connect();
+const fetchVoteCount = async (event: APIGatewayProxyEvent, context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  if (!client) {
+    client = new mongoDB.MongoClient(env.DB_CONN_STRING);
+    await client.connect();
+  }
   const db: mongoDB.Db = client.db('kazoebako');
   const voteHistoryCollection: mongoDB.Collection = db.collection('voteHistory');
   console.log(`Successfully connected to database: ${db.databaseName} and collection: ${voteHistoryCollection.collectionName}`);

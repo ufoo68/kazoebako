@@ -12,7 +12,9 @@
   <div class="w-screen h-screen flex flex-col space-y-5 justify-center items-center bg-slate-100">
     <h1 class="text-2xl">誓いの言葉、投票結果</h1>
 
-    <div class="stats stats-vertical shadow w-full max-w-max">
+    <div id="loading" class="animate-spin h-10 w-10 border-4 border-blue-500 rounded-full border-t-transparent"></div>
+
+    <div id="result" class="stats stats-vertical shadow w-full max-w-max hidden">
 
       <div class="stat place-items-center">
         <div id="rank-1-rating" class="stat-title"></div>

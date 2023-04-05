@@ -23,17 +23,17 @@ const seonsors = [
 let votes = [
   {
     id: 1,
-    label: "1",
+    label: "A",
     count: 0,
   },
   {
     id: 2,
-    label: "2",
+    label: "B",
     count: 0,
   },
   {
     id: 3,
-    label: "3",
+    label: "C",
     count: 0,
   },
 ];

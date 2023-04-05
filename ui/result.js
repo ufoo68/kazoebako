@@ -42,4 +42,8 @@ window.onload = async () => {
     const rankRating = document.getElementById(`rank-${rank.order}-rating`);
     rankRating.innerText = `${rank.rating}位（${rank.count}票）`;
   }
+  const result = document.getElementById("result");
+  result.classList.remove('hidden');
+  const loading = document.getElementById("loading");
+  loading.classList.add('hidden');
 };
